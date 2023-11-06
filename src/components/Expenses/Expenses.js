@@ -8,7 +8,9 @@ function Expenses(props) {
 
   const [year, setYear] = useState("2021");
 
- 
+ const filteredExpenses = props.expenseItems.filter(expense => {
+  return expense.date.getFullYear().toString() === year;
+ })
 
 // const [expensesByYear , setExpensesByYear] = useState(initialExpenses);
 
@@ -18,18 +20,15 @@ function Expenses(props) {
 
   const yearSelectHandler = (selectedYear) => {
     setYear(selectedYear);
-    // console.log("selected year is " + selectedYear);
-    // const filterdExpenses = props.expenses.filter(expense => {
-    //     return expense.date.getFullYear() == selectedYear;
-    // });
-
-    // setExpensesByYear(filterdExpenses);
-
-    
-    
-
-    // console.log(filterdExpenses);
   };
+
+  let expensesContent = <h2 className="expenses-list__fallback">No expenses Found</h2>;
+
+  if(filteredExpenses.length > 0)
+  {
+     expensesContent = filteredExpenses.map(expense => <ExpenseItem key={expense.id} item={expense} />);
+
+  }
 
   return (
     <Card className="expenses">
@@ -38,11 +37,10 @@ function Expenses(props) {
         onYearselect={yearSelectHandler}
       ></ExpensesFilter>
 
-      {props.expenseItems.map(expense => <ExpenseItem item={expense} />)}
-      {/* <ExpenseItem item={props.expenseItems[0]} />
-      <ExpenseItem item={props.expenseItems[1]} />
-      <ExpenseItem item={props.expenseItems[2]} />
-      <ExpenseItem item={props.expenseItems[3]} /> */}
+      {/* {filteredExpenses.length === 0 ? <p>No expenses Found</p>  : filteredExpenses.map(expense => <ExpenseItem key={expense.id} item={expense} />)} */}
+     {expensesContent}
+      
+
     </Card>
   );
 }
